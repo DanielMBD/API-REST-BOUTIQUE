@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Boutique Démo — une expérience e-commerce inspirée de l'identité DevGroup Africa.">
+  <title>Boutique Démo | DevGroup Africa</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div class="site-grid" aria-hidden="true"></div>
+
+  <nav class="navbar navbar-expand-lg dg-navbar sticky-top">
+    <div class="container">
+      <a class="navbar-brand dg-brand" href="/" aria-label="Accueil Boutique Démo">
+        <!-- <span class="dg-brand-mark">DG</span> -->
+        <span class="dg-brand-copy">
+          <strong>Boutique</strong>
+          <small>by DevGroup Africa</small>
+        </span>
+      </a>
+
+      <div class="d-flex gap-2 align-items-center">
+        <span id="userLabel" class="dg-user-label small"></span>
+
+        <button
+          class="btn dg-btn dg-btn-ghost btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#authModal">
+          Connexion
+        </button>
+
+        <button id="logoutBtn" class="btn dg-btn dg-btn-muted btn-sm d-none">
+          Déconnexion
+        </button>
+
+        <button
+          class="btn dg-btn dg-btn-primary btn-sm"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#cartCanvas">
+          Panier
+          <span id="cartCount" class="badge dg-cart-badge">0</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container hero-container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            E-commerce • API REST • MongoDB
+          </div>
+
+          <h1>
+            Une boutique en ligne
+            <span>simple, moderne et fonctionnelle.</span>
+          </h1>
+
+          <p class="hero-copy">
+            Découvrez les produits, gérez votre panier, passez commande et
+            simulez un paiement depuis une interface conçue dans l’esprit
+            numérique de DevGroup Africa.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#catalogue" class="btn dg-btn dg-btn-primary">
+              Explorer le catalogue
+            </a>
+            <a href="/admin.html" class="btn dg-btn dg-btn-ghost">
+              Espace administration
+            </a>
+          </div>
+
+          <div class="hero-meta">
+            <div>
+              <strong>API REST</strong>
+              <span>Node.js + Express</span>
+            </div>
+            <div>
+              <strong>Données</strong>
+              <span>MongoDB + Mongoose</span>
+            </div>
+            <div>
+              <strong>Paiement</strong>
+              <span>Simulation sécurisée</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="hero-panel">
+            <div class="hero-panel-top">
+              <span class="status-dot"></span>
+              <span>Système opérationnel</span>
+              <span class="ms-auto mono">v1.0</span>
+            </div>
+
+            <div class="hero-panel-body">
+              <div class="code-line">
+                <span>GET</span>
+                <code>/api/products</code>
+              </div>
+              <div class="code-line">
+                <span>POST</span>
+                <code>/api/cart/items</code>
+              </div>
+              <div class="code-line">
+                <span>POST</span>
+                <code>/api/orders</code>
+              </div>
+              <div class="code-line">
+                <span>POST</span>
+                <code>/api/payments/simulate</code>
+              </div>
+            </div>
+
+            <div class="hero-panel-footer">
+              <span>Interface</span>
+              <span class="line"></span>
+              <span>API</span>
+              <span class="line"></span>
+              <span>MongoDB</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="catalogue" class="catalogue-section">
+      <div class="container">
+        <div id="alertArea"></div>
+
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">Catalogue</span>
+            <h2>Produits disponibles</h2>
+          </div>
+
+          <a href="/admin.html" class="admin-link">
+            Administration
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+
+        <div class="search-panel">
+          <div class="row g-3">
+            <div class="col-lg-6">
+              <label for="searchInput" class="form-label">Rechercher</label>
+              <div class="input-shell">
+                <span class="input-icon">⌕</span>
+                <input
+                  id="searchInput"
+                  class="form-control"
+                  placeholder="Nom du produit">
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <label for="categorySelect" class="form-label">Catégorie</label>
+              <select id="categorySelect" class="form-select">
+                <option value="">Toutes les catégories</option>
+              </select>
+            </div>
+
+            <div class="col-lg-2 d-flex align-items-end">
+              <button id="searchBtn" class="btn dg-btn dg-btn-dark w-100">
+                Rechercher
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="productsGrid" class="row g-4"></div>
+      </div>
+    </section>
+
+    <section id="ordersSection" class="orders-section d-none">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">Compte client</span>
+            <h2>Mes commandes</h2>
+          </div>
+        </div>
+        <div id="ordersList"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="dg-footer">
+    <div class="container">
+      <div>
+        <span class="dg-brand-mark dg-brand-mark-small">DG</span>
+        <strong>Boutique Démo</strong>
+      </div>
+      <p>Une démonstration e-commerce propulsée par une API REST et MongoDB.</p>
+      <span class="mono">DevGroup Africa</span>
+    </div>
+  </footer>
+
+  <div class="offcanvas offcanvas-end dg-offcanvas" tabindex="-1" id="cartCanvas">
+    <div class="offcanvas-header">
+      <div>
+        <span class="section-kicker">Votre sélection</span>
+        <h5 class="offcanvas-title">Mon panier</h5>
+      </div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+
+    <div class="offcanvas-body">
+      <div id="cartItems"></div>
+
+      <div class="cart-total-box">
+        <span>Total</span>
+        <strong id="cartTotal">0 FCFA</strong>
+      </div>
+
+      <div class="mt-4">
+        <label for="shippingAddress" class="form-label">Adresse de livraison</label>
+        <textarea
+          id="shippingAddress"
+          class="form-control"
+          rows="3"
+          placeholder="Ex. Port-Gentil, quartier..."></textarea>
+      </div>
+
+      <button id="checkoutBtn" class="btn dg-btn dg-btn-primary w-100 mt-3">
+        Créer la commande
+      </button>
+    </div>
+  </div>
+
+  <div class="modal fade" id="authModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content dg-modal">
+        <div class="modal-header">
+          <div>
+            <span class="section-kicker">Espace sécurisé</span>
+            <h5 class="modal-title">Connexion ou inscription</h5>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <ul class="nav nav-tabs dg-tabs mb-4">
+            <li class="nav-item">
+              <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#loginTab">
+                Connexion
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#registerTab">
+                Inscription
+              </button>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+            <form id="loginForm" class="tab-pane fade show active">
+              <label for="loginEmail" class="form-label">Adresse e-mail</label>
+              <input
+                id="loginEmail"
+                class="form-control mb-3"
+                type="email"
+                placeholder="E-mail"
+                value="client@boutique.ga"
+                required>
+
+              <label for="loginPassword" class="form-label">Mot de passe</label>
+              <input
+                id="loginPassword"
+                class="form-control mb-4"
+                type="password"
+                placeholder="Mot de passe"
+                value="Client123!"
+                required>
+
+              <button class="btn dg-btn dg-btn-dark w-100">
+                Se connecter
+              </button>
+            </form>
+
+            <form id="registerForm" class="tab-pane fade">
+              <label for="registerName" class="form-label">Nom complet</label>
+              <input id="registerName" class="form-control mb-3" placeholder="Nom complet" required>
+
+              <label for="registerEmail" class="form-label">Adresse e-mail</label>
+              <input id="registerEmail" class="form-control mb-3" type="email" placeholder="E-mail" required>
+
+              <label for="registerPassword" class="form-label">Mot de passe</label>
+              <input
+                id="registerPassword"
+                class="form-control mb-3"
+                type="password"
+                placeholder="6 caractères minimum"
+                required>
+
+              <label for="registerAddress" class="form-label">Adresse</label>
+              <input id="registerAddress" class="form-control mb-4" placeholder="Adresse">
+
+              <button class="btn dg-btn dg-btn-primary w-100">
+                Créer le compte
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
