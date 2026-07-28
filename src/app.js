@@ -25,33 +25,31 @@ app.use(morgan("dev"));
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/api", (req, res) => {
+function getApiOverview(req) {
   const baseUrl = `${req.protocol}://${req.get("host")}`;
 
-  res.json({
+  return {
     success: true,
     name: "Boutique API REST",
     message: "Bienvenue sur l'API REST de demonstration de la boutique.",
     usage: {
       local: "http://localhost:3000/api",
-      online: `${baseUrl}/api`
+      online: `${baseUrl}/api`,
+      directDemo: `${baseUrl}/demo`
     },
     examples: {
       health: `${baseUrl}/api/health`,
       demo: `${baseUrl}/api/demo`,
+      demoDirect: `${baseUrl}/demo`,
       products: `${baseUrl}/api/products`,
       categories: `${baseUrl}/api/categories`,
       swagger: `${baseUrl}/api-docs`
     }
-  });
-});
+  };
+}
 
-app.get("/api/health", (_req, res) => {
-  res.json({ success: true, message: "API opérationnelle" });
-});
-
-app.get("/api/demo", (_req, res) => {
-  res.json({
+function getDemoData() {
+  return {
     success: true,
     message: "Exemple de donnees JSON renvoyees par une API REST.",
     data: [
@@ -70,7 +68,19 @@ app.get("/api/demo", (_req, res) => {
         inStock: true
       }
     ]
-  });
+  };
+}
+
+app.get(["/api", "/api/"], (req, res) => {
+  res.json(getApiOverview(req));
+});
+
+app.get(["/api/health", "/health"], (_req, res) => {
+  res.json({ success: true, message: "API opérationnelle" });
+});
+
+app.get(["/api/demo", "/demo"], (_req, res) => {
+  res.json(getDemoData());
 });
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

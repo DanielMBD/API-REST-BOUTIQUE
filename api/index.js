@@ -8,7 +8,7 @@ let databaseConnection;
 
 function shouldConnectDatabase(req) {
   const pathname = req.url.split("?")[0];
-  const publicJsonRoutes = ["/api", "/api/demo", "/api/health"];
+  const publicJsonRoutes = ["/api", "/api/", "/api/demo", "/api/health", "/demo", "/health"];
 
   return !publicJsonRoutes.includes(pathname) && !pathname.startsWith("/api-docs");
 }
