@@ -25,8 +25,52 @@ app.use(morgan("dev"));
 
 app.use(express.static(path.join(__dirname, "public")));
 
+app.get("/api", (req, res) => {
+  const baseUrl = `${req.protocol}://${req.get("host")}`;
+
+  res.json({
+    success: true,
+    name: "Boutique API REST",
+    message: "Bienvenue sur l'API REST de demonstration de la boutique.",
+    usage: {
+      local: "http://localhost:3000/api",
+      online: `${baseUrl}/api`
+    },
+    examples: {
+      health: `${baseUrl}/api/health`,
+      demo: `${baseUrl}/api/demo`,
+      products: `${baseUrl}/api/products`,
+      categories: `${baseUrl}/api/categories`,
+      swagger: `${baseUrl}/api-docs`
+    }
+  });
+});
+
 app.get("/api/health", (_req, res) => {
   res.json({ success: true, message: "API opérationnelle" });
+});
+
+app.get("/api/demo", (_req, res) => {
+  res.json({
+    success: true,
+    message: "Exemple de donnees JSON renvoyees par une API REST.",
+    data: [
+      {
+        id: 1,
+        name: "Sac artisanal",
+        price: 15000,
+        currency: "FCFA",
+        inStock: true
+      },
+      {
+        id: 2,
+        name: "T-shirt coton",
+        price: 8000,
+        currency: "FCFA",
+        inStock: true
+      }
+    ]
+  });
 });
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

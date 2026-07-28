@@ -76,8 +76,34 @@ npm start
 
 - Boutique : http://localhost:3000
 - Administration : http://localhost:3000/admin.html
+- Accueil JSON de l'API : http://localhost:3000/api
+- Exemple JSON simple : http://localhost:3000/api/demo
 - Swagger : http://localhost:3000/api-docs
 - Santé de l'API : http://localhost:3000/api/health
+
+## 5.1 Démonstration API REST
+
+Pour montrer le fonctionnement d'une API REST, ouvrez directement ces URL dans le navigateur :
+
+```text
+http://localhost:3000/api
+http://localhost:3000/api/demo
+http://localhost:3000/api/products
+http://localhost:3000/api/categories
+```
+
+Le navigateur affiche une réponse JSON. C'est le principe d'une API REST : une application cliente, un navigateur, Postman ou un frontend envoie une requête HTTP, puis le serveur renvoie des données structurées.
+
+En ligne, les mêmes routes seront disponibles avec l'URL Vercel :
+
+```text
+https://votre-projet.vercel.app/api
+https://votre-projet.vercel.app/api/demo
+https://votre-projet.vercel.app/api/products
+https://votre-projet.vercel.app/api/categories
+```
+
+La route `/api/demo` renvoie un exemple JSON fixe. Les routes `/api/products` et `/api/categories` utilisent MongoDB et nécessitent que `MONGODB_URI` soit configuré.
 
 ## 6. Démonstration suggérée
 
@@ -141,3 +167,26 @@ npm start
 ## 8. Remarque
 
 Le paiement est volontairement simulé. Aucune transaction réelle n'est effectuée.
+
+## 9. Déploiement Vercel
+
+Le projet contient une configuration Vercel :
+
+- `api/index.js` : point d'entrée serverless pour Vercel
+- `vercel.json` : redirection des routes vers l'API
+- `.vercelignore` : exclusion des fichiers locaux sensibles comme `.env`
+
+Avant de publier, ajoutez les variables d'environnement dans Vercel :
+
+```text
+MONGODB_URI=...
+JWT_SECRET=...
+JWT_EXPIRES_IN=7d
+```
+
+Puis lancez :
+
+```bash
+npx vercel login
+npx vercel --prod --yes
+```
